@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Session 10</title>
+</head>
+<body>
+
+    <h2>Inline Event Handler via HTML attributes</h2>
+    <button onclick="startReactionTestInline()">Start Test</button>
+
+    <h2>DOM Property Event Handler via JS</h2>
+    <button id="domBtn">Start Test</button>
+
+    <h2>addEventListener() via JS</h2>
+    <p>Press the R key</p>
+
+    <script>
+
+        // Inline Event Handler via HTML attributes 
+        function startReactionTestInline() {
+            alert("You clicked the button! Reaction Time Task Started!");
+        }
+
+        // DOM Property Event Handler via JS
+        document.getElementById("domBtn").onclick = function () {
+        alert("Participant clicked on the stimulus!");
+        }
+
+        // addEventListener() via JS
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "r" || event.key === "R") {
+                alert("R key pressed — response recorded!");
+            }
+        });
+
+    </script>
+
+</body>
+</html>
