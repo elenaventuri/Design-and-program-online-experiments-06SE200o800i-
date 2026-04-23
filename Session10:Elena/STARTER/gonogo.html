@@ -204,9 +204,14 @@
             return {
                 type: jsPsychHtmlKeyboardResponse,
                 // We choose the stimulus depending on the trial type.
-                stimulus: isGo
+                /*stimulus: isGo
                         ? `<div class="stimulus-go">${getStimulusGo()}</div>`
-                        : `<div class="stimulus-nogo">${getStimulusNoGo()}</div>`,
+                        : `<div class="stimulus-nogo">${getStimulusNoGo()}</div>`,*/
+                stimulus: function() {                         
+                    return isGo
+                        ? `<div class="stimulus-go">${getStimulusGo()}</div>`
+                        : `<div class="stimulus-nogo">${getStimulusNoGo()}</div>`;
+                    },
                 choices: [" "],
                 trial_duration: 1000,
                 response_ends_trial: false,
@@ -317,7 +322,7 @@
                 }
             });
 
-            const welcome = {
+            /*const welcome = {
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: `
                     <div>
@@ -327,7 +332,22 @@
                         <p>Press any key to begin.</p>
                     </div>
                 `
-            };
+            };*/
+
+            const welcome = {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: function() {                              
+                    return `
+                       <div>
+                           <h2>Instructions</h2>
+                           <p>Press the spacebar when you see <strong>${getGoInstruction()}</strong>.</p>
+                           <p>Do not press anything when you see <strong>${getNoGoInstruction()}</strong>.</p>
+                           <p>Press any key to begin.</p>
+                       </div>
+                    ;
+                    `
+                }
+            }
 
             const countdown = {
                 type: jsPsychHtmlKeyboardResponse,
