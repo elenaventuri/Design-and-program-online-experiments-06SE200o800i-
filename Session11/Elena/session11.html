@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- step 0:  Load the jsPsych library and plugins -->
+    <script src="https://unpkg.com/jspsych@8.2.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.3/css/jspsych.css" rel="stylesheet" type="text/css" >
+
+    <title>Session 11</title>
+</head>
+<body>
+        <script>
+        // step 2: initiate jsPsych instance and assign to a variable 
+        const jsPsych = initJsPsych();
+
+        //Step 3:  build your timeline
+        let timeline = [];
+
+        // Step 3.1: Define your stimulus object array
+        const flankerStimuli = [
+            { stimulus: '<<<<<', direction: 'left',  congruent: true },
+            { stimulus: '>>>>>', direction: 'right', congruent: true },
+            { stimulus: '>><>>', direction: 'left',  congruent: false },
+            { stimulus: '<<><<', direction: 'right', congruent: false }
+        ];
+
+        // Step 3.2: Write ONE trial template
+
+        const flankerTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
+                // Pulls the current arrow string from the timeline variables.
+                const stim = jsPsych.evaluateTimelineVariable('stimulus');
+                return `<p style="font-size: 72px; font-family: monospace;">${stim}</p>`;
+            },
+            choices: ['f', 'j'],
+            prompt: '<p>Press <strong>F</strong> for Left ( < ) or <strong>J</strong> for Right ( > )</p>',
+            
+            // Tag every trial with its condition automatically for data analysis.
+            data: function() {
+                return {
+                    task: 'flanker',
+                    direction: jsPsych.evaluateTimelineVariable('direction'),
+                    congruency: jsPsych.evaluateTimelineVariable('congruent')
+                };
+            },
+            
+            // Score accuracy automatically based on the keyboard response.
+            on_finish: function(data) {
+                // Determine the correct key: F for left, J for right[cite: 1].
+                data.correct_key = (data.direction === 'left') ? 'f' : 'j';
+                data.correct = (data.response === data.correct_key);
+            }
+        };
+
+        // step 3.3: Link them together in a block 
+        const flankerBlock = {
+            timeline: [flankerTrial],
+            timeline_variables: flankerStimuli,
+            randomize_order: true, // Randomizes trial sequence
+            repetitions: 5        // 4 stimuli * 5 reps = 20 total trials
+        };
+
+        //Step 4: run your jsPsych
+        timeline.push(flankerBlock);
+
+        jsPsych.run(timeline);
+
+        </script>
+  
+
+
+
+</body>
+</html>
